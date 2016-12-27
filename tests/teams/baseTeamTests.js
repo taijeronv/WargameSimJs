@@ -1,12 +1,4 @@
-QUnit.module('WarGame.Teams.Team', {
-    setup: function () {
-        WarGame.initialize();
-        WarGame.Maps.setCurrent('100x100');
-    },
-    teardown: function () {
-        WarGame.reset();
-    }
-});
+QUnit.module('WarGame.Teams.Team');
 
 var data = [
     { name: 'Sample', colour: 0x000000, points: 0, exception: 'team must start with more than 0 points' },
@@ -23,10 +15,10 @@ for (var i=0; i<data.length; i++) {
 QUnit.test('can call constructor with name, colour and points: ' + JSON.stringify(p), function (assert) {
     if (p.exception) {
         expect(1);
-        assert.throws(function () { new WarGame.Teams.Team(p.name, p.colour, p.points); });
+        assert.throws(function () { new WarGame.Teams.BaseTeam(new WarGame.Teams.TeamAttributes(p.name, p.colour, p.points)); });
     } else {
         expect(3);
-        var t = new WarGame.Teams.Team(p.name, p.colour, p.points);
+        var t = new WarGame.Teams.BaseTeam(new WarGame.Teams.TeamAttributes(p.name, p.colour, p.points));
         assert.equal(t.getName(), p.name, 'expected name to match');
         assert.equal(t.getColour(), p.colour, 'expected colour to match');
         assert.equal(t.getRemainingPoints(), p.points, 'expected points to match');
@@ -38,8 +30,8 @@ QUnit.test('can call constructor with name, colour and points: ' + JSON.stringif
 
 QUnit.test('can add a player to a team', function (assert) {
     expect(3);
-    var p = new WarGame.Players.createPlayer('basic');
-    var t = new WarGame.Teams.Team('Test', 0xff0000, 100);
+    var p = new WarGame.Players.Basic();
+    var t = new WarGame.Teams.BaseTeam(new WarGame.Teams.TeamAttributes('Test', 0xff0000, 100));
     t.addPlayer(p);
     var actual = t.getPlayers();
     assert.equal(actual.length, 1, 'expected 1 player');
@@ -49,21 +41,21 @@ QUnit.test('can add a player to a team', function (assert) {
 
 QUnit.test('can remove a player from a team', function (assert) {
     expect(3);
-    var p = new WarGame.Players.createPlayer('basic');
-    var t = new WarGame.Teams.Team('Test', 0xff0000, 100);
+    var p = new WarGame.Players.Basic();
+    var t = new WarGame.Teams.BaseTeam(new WarGame.Teams.TeamAttributes('Test', 0xff0000, 100));
     t.addPlayer(p);
     var actual = t.getPlayers();
     assert.equal(actual.length, 1, 'expected 1 player');
     t.removePlayer(p);
     actual = t.getPlayers();
     assert.equal(actual.length, 0, 'expected 0 players');
-    assert.equal(t.getRemainingPoints(), 85, 'expected 15 points to remain removed');
+    assert.equal(t.getRemainingPoints(), 100, 'expected no points to have been removed');
 });
 
 QUnit.test('can reset a team back to starting point', function (assert) {
     expect(2);
-    var p = new WarGame.Players.createPlayer('basic');
-    var t = new WarGame.Teams.Team('Test', 0xff0000, 100);
+    var p = new WarGame.Players.Basic();
+    var t = new WarGame.Teams.BaseTeam(new WarGame.Teams.TeamAttributes('Test', 0xff0000, 100));
     t.addPlayer(p);
     t.reset();
     actual = t.getPlayers();

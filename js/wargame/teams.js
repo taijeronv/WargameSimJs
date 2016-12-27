@@ -1,9 +1,6 @@
 var WarGame = WarGame || {};
 WarGame.Teams = {};
 
-WarGame.Teams.POINTS_PER_TEAM = 0;
-WarGame.Teams.CURRENT = 0;
-WarGame.Teams.PRIORITY = 0;
 WarGame.Teams._array = [];
 
 WarGame.Teams.get = function () {
@@ -11,19 +8,10 @@ WarGame.Teams.get = function () {
 };
 
 WarGame.Teams.add = function (team) {
-    if (team instanceof WarGame.Teams.Team && WarGame.Teams._array.indexOf(team) < 0) {
+  // if 'team' is of correct type and doesn't already exist
+    if (team instanceof WarGame.Teams.BaseTeam && WarGame.Teams._array.indexOf(team) < 0) {
         WarGame.Teams._array.push(team);
     }
-};
-
-WarGame.Teams.setTotalPoints = function (points) {
-    if (!isNaN(points)) {
-        WarGame.Teams.POINTS_PER_TEAM = Math.floor(points / WarGame.Teams.get().length);
-    }
-};
-
-WarGame.Teams.getPointsPerTeam = function () {
-    return WarGame.Teams.POINTS_PER_TEAM;
 };
 
 WarGame.Teams.getTeamIndexByName = function (name) {
@@ -48,28 +36,22 @@ WarGame.Teams.getTeamByName = function (name) {
     throw "unable to locate team with name: " + name;
 };
 
-WarGame.Teams.getCurrent = function () {
-    return WarGame.Teams.get()[WarGame.Teams.CURRENT];
+WarGame.Teams.getAllPlayers = function () {
+  var players = [];
+  for (var team of WarGame.Teams._array) {
+    players = players.concat(team.getPlayers());
+  }
+  return players;
 };
 
-WarGame.Teams.getPriority = function () {
-    return WarGame.Teams.get()[WarGame.Teams.PRIORITY];
-};
-
-WarGame.Teams.setAsPriorityTeamByIndex = function (index) {
-    WarGame.Teams.PRIORITY = index;
-    WarGame.Teams.CURRENT = index;
-};
-
-WarGame.Teams.next = function () {
-    WarGame.Teams.CURRENT++;
-    if (WarGame.Teams.CURRENT > 1) {
-        WarGame.Teams.CURRENT = 0;
-    }
-    WarGame.UI.setCurrentTeamText(WarGame.Teams.getCurrent().name);
+WarGame.Teams.getOpponentsOfPlayer = function (player) {
+  var teamName = player.team.attributes.name;
+  var opponents = WarGame.Teams.getAllPlayers().filter(function (p) {
+      return p.team.attributes.name !== teamName;
+  });
+  return opponents;
 };
 
 WarGame.Teams.reset = function () {
-    WarGame.Teams.CURRENT = 0;
     WarGame.Teams._array = [];
 };

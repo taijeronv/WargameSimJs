@@ -2,14 +2,6 @@ var WarGame = WarGame || {};
 WarGame.Utils = {
     _counter: 0,
 
-    boardLocToCoordinates: function (boardLocation, grid) {
-        return new WarGame.BoardLocation(boardLocation.x, boardLocation.y, boardLocation.z, grid).toVector();
-    },
-
-    coordinatesToBoardLoc: function (coordinates, grid) {
-        return new WarGame.BoardLocation(0, 0, 0, grid).setFromVector(coordinates);
-    },
-
     diceRoll: function (numDice, sides) {
         var times = numDice || 1;
         var s = sides || 6;

@@ -41,8 +41,7 @@ WarGame.Phases.doCurrent = function () {
             break;
         default:
             // TODO: log this
-            WarGame.Phases.CURRENT = WarGame.Phases.PRIORITY;
-            WarGame.Phases.doCurrent();
+            throw "invalid phase specified: " + WarGame.Phases.CURRENT;
     }
 };
 

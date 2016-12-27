@@ -22,12 +22,15 @@
 <script src="js/wargame/players/stats.js"></script>
 <script src="js/wargame/players/location.js"></script>
 <script src="js/wargame/players/base.js"></script>
+<script src="js/wargame/players/attributes.js"></script>
 <script src="js/wargame/maps.js"></script>
 <script src="js/wargame/maps/base.js"></script>
+<script src="js/wargame/maps/attributes.js"></script>
 <script src="js/wargame/rounds.js"></script>
 <script src="js/wargame/rounds/history.js"></script>
 <script src="js/wargame/teams.js"></script>
 <script src="js/wargame/teams/team.js"></script>
+<script src="js/wargame/teams/attributes.js"></script>
 <script src="js/wargame/battles.js"></script>
 <script src="js/wargame/battles/base.js"></script>
 <script src="js/wargame/battles/ranged.js"></script>
@@ -41,35 +44,46 @@
 <script src="js/wargame/ui.js"></script>
 <script src="js/wargame/ui/plotter.js"></script>
 
-<script src="resources/maps/100x100/map.js"></script>
-<script src="resources/players/light/player.js"></script>
-<script src="resources/players/basic/player.js"></script>
-<script src="resources/players/heavy/player.js"></script>
-<script src="resources/players/hero/player.js"></script>
+<script src="resources/teams/blue.js"></script>
+<script src="resources/teams/red.js"></script>
+<script src="resources/maps/100x100.js"></script>
+<script src="resources/players/light.js"></script>
+<script src="resources/players/basic.js"></script>
+<script src="resources/players/heavy.js"></script>
+<script src="resources/players/hero.js"></script>
 
 <script language="javascript">
     document.querySelector('#playfield').style.height = window.innerHeight + "px";
-    WarGame.initialize();
-    WarGame.setMap("100x100");
+
+    var map = WarGame.Maps.10x10();
+    WarGame.Maps.set(map);
+
+    var red = new WarGame.Teams.Red(100); // points
+    var blue = new WarGame.Teams.Blue(100); // points
 
     /**
      * available players are:
-     * - light: weak archers
-     * - basic: standard warriors
-     * - heavy: strong, slow warriors
-     * - hero: powerful warriors with high cost
+     * - light: weak archers (-10 points)
+     * - basic: standard warriors (-15 points)
+     * - heavy: strong, slow warriors (-20 points)
+     * - hero: powerful warriors with high cost (-50 points)
      */
-    WarGame.addPlayer("light", 0, { x: 51, z: 49 }); // -10 points
-    WarGame.addPlayer("basic", 0, { x: 51, z: 51 }); // -15 points
-    WarGame.addPlayer("basic", 0, { x: 52, z: 51 }); // -15 points
-    WarGame.addPlayer("heavy", 0, { x: 55, z: 55 }); // -20 points
-    WarGame.addPlayer("heavy", 0, { x: 45, z: 45 }); // -20 points
-    WarGame.addPlayer("heavy", 0, { x: 50, z: 48 }); // -20 points
+    red.addPlayer(new WarGame.Players.Light()); // -10 points
+    red.addPlayer(new WarGame.Players.Basic()); // -15 points
+    red.addPlayer(new WarGame.Players.Basic()); // -15 points
+    red.addPlayer(new WarGame.Players.Heavy()); // -20 points
+    red.addPlayer(new WarGame.Players.Heavy()); // -20 points
+    red.addPlayer(new WarGame.Players.Heavy()); // -20 points
 
-    WarGame.addPlayer("heavy", 1, { x: 50, z: 50 }); // -20 points
-    WarGame.addPlayer("hero", 1, { x: 49, z: 51 });  // -50 points
-    WarGame.addPlayer("light", 1, { x: 50, z: 30 }); // -10 points
-    WarGame.addPlayer("basic", 1, { x: 50, z: 60 }); // -15 points
+    blue.addPlayer(new WarGame.Players.Heavy()); // -20 points
+    blue.addPlayer(new WarGame.Players.Hero());  // -50 points
+    blue.addPlayer(new WarGame.Players.Light()); // -10 points
+    blue.addPlayer(new WarGame.Players.Basic()); // -15 points
+
+    WarGame.Teams.add(red);
+    WarGame.Teams.add(blue);
+
+    WarGame.initialise();
 
     function animate() {
         requestAnimationFrame(animate);
