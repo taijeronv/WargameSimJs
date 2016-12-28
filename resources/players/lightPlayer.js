@@ -1,6 +1,6 @@
 var WarGame = WarGame || {};
 WarGame.Players = WarGame.Players || {};
-WarGame.Players.Light = function () {
+WarGame.Players.LightPlayer = function () {
   var lightStats = new WarGame.Players.PlayerStats(
     1, // mele
     1, // ranged
@@ -21,12 +21,11 @@ WarGame.Players.Light = function () {
     1.2,        // height
     7,          // move
     14,         // shoot
-    null,       // effect
-    lightStats  // stats
+    null       // effect
   );
 
   WarGame.Players.BasePlayer.call(this, lightAttributes);
 };
 
-WarGame.Players.Light.prototype = Object.create(WarGame.Players.BasePlayer.prototype);
-WarGame.Players.Light.prototype.constructor = WarGame.Players.Light;
+WarGame.Players.LightPlayer.prototype = Object.create(WarGame.Players.BasePlayer.prototype);
+WarGame.Players.LightPlayer.prototype.constructor = WarGame.Players.LightPlayer;

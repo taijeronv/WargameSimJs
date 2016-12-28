@@ -1,4 +1,4 @@
-WarGame.Players.Heavy = function (location) {
+WarGame.Players.HeavyPlayer = function (location) {
   var heavyStats = new WarGame.Players.PlayerStats(
     5, // mele
     5, // ranged
@@ -19,12 +19,11 @@ WarGame.Players.Heavy = function (location) {
     0.8,          // height
     3,          // move
     6,         // shoot
-    null,       // effect
-    heavyStats  // stats
+    null       // effect
   );
 
-  WarGame.Players.BasePlayer.call(this, heavyAttributes, location);
+  WarGame.Players.BasePlayer.call(this, heavyAttributes, heavyStats);
 };
 
-WarGame.Players.Heavy.prototype = Object.create(WarGame.Players.BasePlayer.prototype);
-WarGame.Players.Heavy.prototype.constructor = WarGame.Players.Heavy;
+WarGame.Players.HeavyPlayer.prototype = Object.create(WarGame.Players.BasePlayer.prototype);
+WarGame.Players.HeavyPlayer.prototype.constructor = WarGame.Players.HeavyPlayer;

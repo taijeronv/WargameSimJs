@@ -31,7 +31,7 @@ WarGame.Maps.BaseMap.prototype.removePlayer = function (player) {
 WarGame.Maps.BaseMap.prototype.movePlayerTo = function (player, boardLoc) {
   var playerLoc = this.getPlayerLocation(player);
   var dist = this.getDistanceBetweenTwoLocations(playerLoc, boardLoc);
-  if (player.attributes.move >= dist) {
+  if (player.getMove() >= dist) {
     this.placePlayer(player, boardLoc);
   } else {
     throw "player can only move a distance of: '" + player.attributes.move + "' and the selected space is: " + dist;
@@ -164,8 +164,8 @@ WarGame.Maps.BaseMap.prototype.getMapLocationFromVector = function (vector) {
 };
 
 WarGame.Maps.BaseMap.prototype.getVectorFromMapLocation = function (boardLoc) {
-    var zLength = this.grid.length;
-    var xLength = this.grid[0].length;
+    var zLength = this.attributes.grid.length;
+    var xLength = this.attributes.grid[0].length;
     var boardX = boardLoc.x;
     var boardZ = boardLoc.z;
     var boardY = boardLoc.y;
@@ -184,7 +184,9 @@ WarGame.Maps.BaseMap.prototype.generateObj = function () {
         for (var x=0; x<this.attributes.grid[z].length; x++) {
             var boxGeometry = new THREE.BoxGeometry(1, WarGame.Maps.MAX_BLOCK_HEIGHT, 1);
             var y = -(WarGame.Maps.MAX_BLOCK_HEIGHT) + this.attributes.grid[z][x];
-            var coordinates = this.getVectorFromMapLocation(new WarGame.Maps.MapLocation(x, z));
+            var loc = new WarGame.Maps.MapLocation(x, z);
+            loc.y = y;
+            var coordinates = this.getVectorFromMapLocation(loc);
             matrix.makeTranslation(
                 coordinates.x,
                 coordinates.y,

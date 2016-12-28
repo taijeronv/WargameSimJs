@@ -10,7 +10,7 @@ WarGame.Rounds.getCurrent = function () {
 WarGame.Rounds.next = function () {
     WarGame.Rounds.CURRENT++;
     // add history record for new round for all players
-    var players = WarGame.getPlayers();
+    var players = WarGame.Teams.getAllPlayers();
     for (var i=0; i<players.length; i++) {
         players[i].history.push(new WarGame.Rounds.History());
     }

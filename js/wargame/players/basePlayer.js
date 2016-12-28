@@ -1,46 +1,67 @@
 var WarGame = WarGame || {};
 WarGame.Players = WarGame.Players || {};
-WarGame.Players.BasePlayer = function (attributes) {
-    this.id = WarGame.Utils.newId();
-    this.attributes = attributes;
-    this.obj = null;
-    this.team = null;
+WarGame.Players.BasePlayer = function (attributes, stats) {
+    this._id = WarGame.Utils.newId();
+    this._attributes = attributes;
+    this._stats = stats;
+    this._obj = null;
+    this._team = null;
 };
 
 WarGame.Players.BasePlayer.prototype.setColour = function (colour) {
-    // this.obj.material.color.setHex(colour);
+    // this._obj.material.color.setHex(colour);
 };
 
 WarGame.Players.BasePlayer.prototype.setTeam = function (team) {
-    this.team = team;
-    this.setColour(this.team.colour);
+  this._team = team;
+  this.setColour(this._team.colour);
 };
 
-WarGame.Players.BasePlayer.prototype.wound = function () {
-    this.attributes.stats.wounds--;
-};
+WarGame.Players.BasePlayer.prototype.getTeam = function () {
+  return this._team;
+}
 
 WarGame.Players.BasePlayer.prototype.getName = function () {
-    return this.attributes.name;
+  return this._attributes.name;
 };
 
 WarGame.Players.BasePlayer.prototype.getCost = function () {
-    return this.attributes.cost;
-};
-
-WarGame.Players.BasePlayer.prototype.getWounds = function () {
-    return this.attributes.stats.wounds;
+  return this._attributes.cost;
 };
 
 WarGame.Players.BasePlayer.prototype.getShoot = function () {
-    return this.attributes.shoot;
+  return this._attributes.shoot;
 };
 
+WarGame.Players.BasePlayer.prototype.inflictWound = function () {
+    this._stats.wounds--;
+};
+
+WarGame.Players.BasePlayer.prototype.getWounds = function () {
+    return this._stats.wounds;
+};
+
+WarGame.Players.BasePlayer.prototype.getAttacks = function () {
+  return this._stats.attacks;
+};
+
+WarGame.Players.BasePlayer.prototype.getRanged = function () {
+  return this._stats.ranged;
+};
+
+WarGame.Players.BasePlayer.prototype.getMele = function () {
+  return this._stats.mele;
+};
+
+WarGame.Players.BasePlayer.prototype.getMove = function () {
+  return this._attributes.move;
+}
+
 WarGame.Players.BasePlayer.prototype.getObj = function () {
-  if (!this.obj) {
-    this.obj = generateObj();
+  if (!this._obj) {
+    this._obj = this.generateObj();
   }
-  return this.obj;
+  return this._obj;
 }
 
 WarGame.Players.BasePlayer.prototype.generateObj = function () {
@@ -60,34 +81,31 @@ WarGame.Players.BasePlayer.prototype.generateObj = function () {
 
     // body
     geometry = new THREE.CylinderGeometry(
-        this.attributes.width / 2, // top radius
+        this._attributes.width / 2, // top radius
         0.1, // bottom radius
-        this.attributes.height, // length
+        this._attributes.height, // length
         6,  // circle segments
         1,   // length segments
         false); // open
-    matrix.makeTranslation(0, (this.attributes.height / 2) + 0.1, 0);
+    matrix.makeTranslation(0, (this._attributes.height / 2) + 0.1, 0);
     playerGeometry.merge(geometry, matrix);
 
     // head
-    var headRadius = (this.attributes.width / 2) - 0.1;
+    var headRadius = (this._attributes.width / 2) - 0.1;
     geometry = new THREE.SphereGeometry(
         headRadius, // radius
         6,  // width segments
         6); // height segments
-    matrix.makeTranslation(0, (this.attributes.height / 2) + 0.1 + ((this.attributes.height / 2) + (this.attributes.width / 2)), 0);
+    matrix.makeTranslation(0, (this._attributes.height / 2) + 0.1 + ((this._attributes.height / 2) + (this._attributes.width / 2)), 0);
     playerGeometry.merge(geometry, matrix);
 
     var playerMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 }); // gray (set later)
     var playerObj = new THREE.Mesh(playerGeometry, playerMaterial);
     playerObj.castShadow = true;
 
-    this.obj = playerObj;
+    this._obj = playerObj;
 
-    // move to current location
-    this.moveTo(this.location, true);
-
-    if (this.team && this.team.colour) {
-        this.setColour(this.team.colour);
+    if (this._team && this._team.colour) {
+        this.setColour(this._team.colour);
     }
 };

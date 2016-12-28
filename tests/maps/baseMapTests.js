@@ -53,7 +53,7 @@ QUnit.test('movePlayerTo method moves MapLocation', function (assert) {
     var done = assert.async();
     expect(2);
     var m = new WarGame.Maps.Map10x10();
-    var p = new WarGame.Players.Light();
+    var p = new WarGame.Players.LightPlayer();
     var loc = new WarGame.Maps.MapLocation(0, 0);
     m.placePlayer(p, loc);
     var actualLoc = m.getPlayerLocation(p);
@@ -70,7 +70,7 @@ QUnit.test('isPlayerBattling method is false when no opponents in mele range', f
     expect(1);
 
     var m = new WarGame.Maps.Map10x10();
-    var p1 = new WarGame.Players.Basic();
+    var p1 = new WarGame.Players.BasicPlayer();
     var t1 = new WarGame.Teams.Blue(100);
     var t2 = new WarGame.Teams.Red(10000);
     t1.addPlayer(p1);
@@ -83,7 +83,7 @@ QUnit.test('isPlayerBattling method is false when no opponents in mele range', f
     for (var z=0; z<=9; z++) {
       for (var x=0; x<=9; x++) {
         if ((z<4 || z>6) && (x<4 || x>6)) {
-          var p = new WarGame.Players.Basic();
+          var p = new WarGame.Players.BasicPlayer();
           t2.addPlayer(p);
           m.placePlayer(p, new WarGame.Maps.MapLocation(x, z));
         }
@@ -105,8 +105,8 @@ QUnit.test('isPlayerBattling method is false when team nearby: ' + JSON.stringif
     var done = assert.async();
     expect(1);
     var m = new WarGame.Maps.Map10x10();
-    var p1 = new WarGame.Players.Basic();
-    var p2 = new WarGame.Players.Basic();
+    var p1 = new WarGame.Players.BasicPlayer();
+    var p2 = new WarGame.Players.BasicPlayer();
     var t = new WarGame.Teams.Blue(1000);
     t.addPlayer(p1);
     t.addPlayer(p2);
@@ -124,8 +124,8 @@ QUnit.test('isPlayerBattling method is true when opponents nearby: ' + JSON.stri
     var done = assert.async();
     expect(1);
     var m = new WarGame.Maps.Map10x10();
-    var p1 = new WarGame.Players.Basic();
-    var p2 = new WarGame.Players.Basic();
+    var p1 = new WarGame.Players.BasicPlayer();
+    var p2 = new WarGame.Players.BasicPlayer();
     var t1 = new WarGame.Teams.Blue(1000);
     var t2 = new WarGame.Teams.Red(1000);
     t1.addPlayer(p1);

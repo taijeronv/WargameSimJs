@@ -1,4 +1,4 @@
-WarGame.Players.Hero = function (location) {
+WarGame.Players.HeroPlayer = function (location) {
   var heroStats = new WarGame.Players.PlayerStats(
     6, // mele
     3, // ranged
@@ -19,12 +19,11 @@ WarGame.Players.Hero = function (location) {
     1.2,          // height
     6,          // move
     15,         // shoot
-    null,       // effect
-    heroStats  // stats
+    null       // effect
   );
 
-  WarGame.Players.BasePlayer.call(this, heroAttributes, location);
+  WarGame.Players.BasePlayer.call(this, heroAttributes, heroStats);
 };
 
-WarGame.Players.Hero.prototype = Object.create(WarGame.Players.BasePlayer.prototype);
-WarGame.Players.Hero.prototype.constructor = WarGame.Players.Hero;
+WarGame.Players.HeroPlayer.prototype = Object.create(WarGame.Players.BasePlayer.prototype);
+WarGame.Players.HeroPlayer.prototype.constructor = WarGame.Players.HeroPlayer;

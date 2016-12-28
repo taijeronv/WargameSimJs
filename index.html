@@ -18,23 +18,22 @@
 </body>
 
 <script src="js/wargame/utils.js"></script>
-<script src="js/wargame/players.js"></script>
-<script src="js/wargame/players/stats.js"></script>
-<script src="js/wargame/players/location.js"></script>
-<script src="js/wargame/players/base.js"></script>
-<script src="js/wargame/players/attributes.js"></script>
+<script src="js/wargame/players/playerStats.js"></script>
+<script src="js/wargame/players/basePlayer.js"></script>
+<script src="js/wargame/players/playerAttributes.js"></script>
 <script src="js/wargame/maps.js"></script>
-<script src="js/wargame/maps/base.js"></script>
-<script src="js/wargame/maps/attributes.js"></script>
+<script src="js/wargame/maps/mapLocation.js"></script>
+<script src="js/wargame/maps/mapAttributes.js"></script>
+<script src="js/wargame/maps/baseMap.js"></script>
 <script src="js/wargame/rounds.js"></script>
 <script src="js/wargame/rounds/history.js"></script>
 <script src="js/wargame/teams.js"></script>
-<script src="js/wargame/teams/team.js"></script>
-<script src="js/wargame/teams/attributes.js"></script>
+<script src="js/wargame/teams/teamAttributes.js"></script>
+<script src="js/wargame/teams/baseTeam.js"></script>
 <script src="js/wargame/battles.js"></script>
-<script src="js/wargame/battles/base.js"></script>
-<script src="js/wargame/battles/ranged.js"></script>
-<script src="js/wargame/battles/mele.js"></script>
+<script src="js/wargame/battles/baseBattle.js"></script>
+<script src="js/wargame/battles/rangedBattle.js"></script>
+<script src="js/wargame/battles/meleBattle.js"></script>
 <script src="js/wargame/phases.js"></script>
 <script src="js/wargame/phases/priority.js"></script>
 <script src="js/wargame/phases/move.js"></script>
@@ -46,16 +45,16 @@
 
 <script src="resources/teams/blue.js"></script>
 <script src="resources/teams/red.js"></script>
-<script src="resources/maps/100x100.js"></script>
-<script src="resources/players/light.js"></script>
-<script src="resources/players/basic.js"></script>
-<script src="resources/players/heavy.js"></script>
-<script src="resources/players/hero.js"></script>
+<script src="resources/maps/map10x10.js"></script>
+<script src="resources/players/lightPlayer.js"></script>
+<script src="resources/players/basicPlayer.js"></script>
+<script src="resources/players/heavyPlayer.js"></script>
+<script src="resources/players/heroPlayer.js"></script>
 
 <script language="javascript">
     document.querySelector('#playfield').style.height = window.innerHeight + "px";
 
-    var map = WarGame.Maps.10x10();
+    var map = new WarGame.Maps.Map10x10();
     WarGame.Maps.set(map);
 
     var red = new WarGame.Teams.Red(100); // points
@@ -68,22 +67,22 @@
      * - heavy: strong, slow warriors (-20 points)
      * - hero: powerful warriors with high cost (-50 points)
      */
-    red.addPlayer(new WarGame.Players.Light()); // -10 points
-    red.addPlayer(new WarGame.Players.Basic()); // -15 points
-    red.addPlayer(new WarGame.Players.Basic()); // -15 points
-    red.addPlayer(new WarGame.Players.Heavy()); // -20 points
-    red.addPlayer(new WarGame.Players.Heavy()); // -20 points
-    red.addPlayer(new WarGame.Players.Heavy()); // -20 points
+    red.addPlayer(new WarGame.Players.LightPlayer()); // -10 points
+    red.addPlayer(new WarGame.Players.BasicPlayer()); // -15 points
+    red.addPlayer(new WarGame.Players.BasicPlayer()); // -15 points
+    red.addPlayer(new WarGame.Players.HeavyPlayer()); // -20 points
+    red.addPlayer(new WarGame.Players.HeavyPlayer()); // -20 points
+    red.addPlayer(new WarGame.Players.HeavyPlayer()); // -20 points
 
-    blue.addPlayer(new WarGame.Players.Heavy()); // -20 points
-    blue.addPlayer(new WarGame.Players.Hero());  // -50 points
-    blue.addPlayer(new WarGame.Players.Light()); // -10 points
-    blue.addPlayer(new WarGame.Players.Basic()); // -15 points
+    blue.addPlayer(new WarGame.Players.HeavyPlayer()); // -20 points
+    blue.addPlayer(new WarGame.Players.HeroPlayer());  // -50 points
+    blue.addPlayer(new WarGame.Players.LightPlayer()); // -10 points
+    blue.addPlayer(new WarGame.Players.BasicPlayer()); // -15 points
 
     WarGame.Teams.add(red);
     WarGame.Teams.add(blue);
 
-    WarGame.initialise();
+    WarGame.initialize();
 
     function animate() {
         requestAnimationFrame(animate);

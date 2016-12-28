@@ -4,11 +4,11 @@ WarGame.Phases.Shoot = {
     INTERSECTED: null,
     TEAMS_DONE_PHASE: 0,
     battle: null,
-    pickFromTeam: WarGame.Teams.getCurrent(),
+    pickFromTeam: null,
     opponentsInRange: null,
 
     start: function () {
-        var players = WarGame.getPlayers();
+        var players = WarGame.Teams.getAllPlayers();
         for (var i=0; i<players.length; i++) {
             players[i].history[WarGame.Rounds.getCurrent()].shoot.wounds = players[i].getWounds();
         }

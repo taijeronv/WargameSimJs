@@ -1,4 +1,4 @@
-QUnit.module('WarGame.Teams.Team');
+QUnit.module('WarGame.Teams.BaseTeam');
 
 var data = [
     { name: 'Sample', colour: 0x000000, points: 0, exception: 'team must start with more than 0 points' },
@@ -30,7 +30,7 @@ QUnit.test('can call constructor with name, colour and points: ' + JSON.stringif
 
 QUnit.test('can add a player to a team', function (assert) {
     expect(3);
-    var p = new WarGame.Players.Basic();
+    var p = new WarGame.Players.BasicPlayer();
     var t = new WarGame.Teams.BaseTeam(new WarGame.Teams.TeamAttributes('Test', 0xff0000, 100));
     t.addPlayer(p);
     var actual = t.getPlayers();
@@ -41,7 +41,7 @@ QUnit.test('can add a player to a team', function (assert) {
 
 QUnit.test('can remove a player from a team', function (assert) {
     expect(3);
-    var p = new WarGame.Players.Basic();
+    var p = new WarGame.Players.BasicPlayer();
     var t = new WarGame.Teams.BaseTeam(new WarGame.Teams.TeamAttributes('Test', 0xff0000, 100));
     t.addPlayer(p);
     var actual = t.getPlayers();
@@ -54,7 +54,7 @@ QUnit.test('can remove a player from a team', function (assert) {
 
 QUnit.test('can reset a team back to starting point', function (assert) {
     expect(2);
-    var p = new WarGame.Players.Basic();
+    var p = new WarGame.Players.BasicPlayer();
     var t = new WarGame.Teams.BaseTeam(new WarGame.Teams.TeamAttributes('Test', 0xff0000, 100));
     t.addPlayer(p);
     t.reset();

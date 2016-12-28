@@ -18,11 +18,10 @@ QUnit.test('wound method subtracts from wounds stat', function (assert) {
 
     var s = new WarGame.Players.PlayerStats();
     var a = new WarGame.Players.PlayerAttributes();
-    a.stats = s;
-    var p = new WarGame.Players.BasePlayer(a);
-    p.attributes.stats.wounds = 2;
-    assert.equal(p.attributes.stats.wounds, 2, 'expected to have 2 wound points');
-    p.wound();
-    assert.equal(p.attributes.stats.wounds, 1, 'expected to have 1 wound remaining');
+    var p = new WarGame.Players.BasePlayer(a, s);
+    p._stats.wounds = 2;
+    assert.equal(p.getWounds(), 2, 'expected to have 2 wound points');
+    p.inflictWound();
+    assert.equal(p.getWounds(), 1, 'expected to have 1 wound remaining');
     done();
 });

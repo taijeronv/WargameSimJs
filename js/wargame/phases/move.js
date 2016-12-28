@@ -4,7 +4,7 @@ WarGame.Phases.Move = {
     TEAMS_DONE_PHASE: 0,
 
     start: function () {
-        var players = WarGame.getPlayers();
+        var players = WarGame.Teams.getAllPlayers();
         for (var i=0; i<players.length; i++) {
             players[i].history[WarGame.Rounds.getCurrent()].move.loc = new THREE.Vector3().copy(players[i].obj.position);
             players[i].history[WarGame.Rounds.getCurrent()].move.boardLoc = players[i].location.clone();

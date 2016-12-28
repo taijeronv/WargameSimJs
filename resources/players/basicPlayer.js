@@ -1,6 +1,6 @@
 var WarGame = WarGame || {};
 WarGame.Players = WarGame.Players || {};
-WarGame.Players.Basic = function () {
+WarGame.Players.BasicPlayer = function () {
   var basicStats = new WarGame.Players.PlayerStats(
     3, // mele
     5, // ranged
@@ -21,12 +21,11 @@ WarGame.Players.Basic = function () {
     1,          // height
     5,          // move
     10,         // shoot
-    null,       // effect
-    basicStats  // stats
+    null       // effect
   );
 
-  WarGame.Players.BasePlayer.call(this, basicAttributes);
+  WarGame.Players.BasePlayer.call(this, basicAttributes, basicStats);
 };
 
-WarGame.Players.Basic.prototype = Object.create(WarGame.Players.BasePlayer.prototype);
-WarGame.Players.Basic.prototype.constructor = WarGame.Players.Basic;
+WarGame.Players.BasicPlayer.prototype = Object.create(WarGame.Players.BasePlayer.prototype);
+WarGame.Players.BasicPlayer.prototype.constructor = WarGame.Players.BasicPlayer;
