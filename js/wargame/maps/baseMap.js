@@ -1,15 +1,19 @@
 var WarGame = WarGame || {};
 WarGame.Maps = WarGame.Maps || {};
 WarGame.Maps.BaseMap = function (attributes) {
-    this.obj = null;
-    this.attributes = attributes;
-    this.locations = [];
-    for (var z=0; z<this.attributes.grid.length; z++) {
-      this.locations.push([]);
-      for (var x=0; x<this.attributes.grid[z].length; x++) {
-        this.locations[z].push(null);
+    this._obj = null;
+    this._attributes = attributes;
+    this._locations = [];
+    for (var z=0; z<this._attributes.grid.length; z++) {
+      this._locations.push([]);
+      for (var x=0; x<this._attributes.grid[z].length; x++) {
+        this._locations[z].push(null);
       }
     }
+};
+
+WarGame.Maps.BaseMap.prototype.getGrid = function () {
+  return this._attributes.grid;
 };
 
 WarGame.Maps.BaseMap.prototype.placePlayer = function(player, boardLoc) {
@@ -17,7 +21,10 @@ WarGame.Maps.BaseMap.prototype.placePlayer = function(player, boardLoc) {
     try {
       this.removePlayer(player);
     } catch (e) { /* user doesn't exist */ }
-    this.locations[boardLoc.z][boardLoc.x] = player;
+    this._locations[boardLoc.z][boardLoc.x] = player;
+    boardLoc.y = this.getGrid()[boardLoc.z][boardLoc.x];
+    var coords = this.getVectorFromMapLocation(boardLoc)
+    player.getObj().position.set(coords.x,coords.y,coords.z);
   } else {
     throw "location is already occupied; please choose another.";
   }
@@ -25,7 +32,7 @@ WarGame.Maps.BaseMap.prototype.placePlayer = function(player, boardLoc) {
 
 WarGame.Maps.BaseMap.prototype.removePlayer = function (player) {
   var loc = this.getPlayerLocation(player);
-  this.locations[loc.z][loc.x] = null;
+  this._locations[loc.z][loc.x] = null;
 };
 
 WarGame.Maps.BaseMap.prototype.movePlayerTo = function (player, boardLoc) {
@@ -34,7 +41,7 @@ WarGame.Maps.BaseMap.prototype.movePlayerTo = function (player, boardLoc) {
   if (player.getMove() >= dist) {
     this.placePlayer(player, boardLoc);
   } else {
-    throw "player can only move a distance of: '" + player.attributes.move + "' and the selected space is: " + dist;
+    throw "player can only move a distance of: '" + player.getMove() + "' and the selected space is: " + dist;
   }
 };
 
@@ -95,24 +102,24 @@ WarGame.Maps.BaseMap.prototype.playerHasUnobstructedView = function (player) {
 };
 
 WarGame.Maps.BaseMap.prototype.getObj = function () {
-    if (!this.obj) {
+    if (!this._obj) {
         this.generateObj();
     }
-    return this.obj;
+    return this._obj;
 };
 
 WarGame.Maps.BaseMap.prototype.getGrid = function () {
-    return this.attributes.grid;
+    return this._attributes.grid;
 };
 
 WarGame.Maps.BaseMap.prototype.reset = function () {
-  this.obj = null;
+  this._obj = null;
 };
 
 WarGame.Maps.BaseMap.prototype.getPlayerLocation = function(player) {
-  for (var z=0; z<this.locations.length; z++) {
-    for (var x=0; x<this.locations[z].length; x++) {
-      if (this.locations[z][x] === player) {
+  for (var z=0; z<this._locations.length; z++) {
+    for (var x=0; x<this._locations[z].length; x++) {
+      if (this._locations[z][x] === player) {
         return new WarGame.Maps.MapLocation(x, z);
       }
     }
@@ -121,9 +128,9 @@ WarGame.Maps.BaseMap.prototype.getPlayerLocation = function(player) {
 };
 
 WarGame.Maps.BaseMap.prototype.isLocationOccupied = function (boardLoc) {
-  if ((this.locations.length > boardLoc.z && boardLoc.z >= 0) &&
-    (this.locations[0].length > boardLoc.x && boardLoc.x >= 0)) {
-    if (this.locations[boardLoc.z][boardLoc.x]) {
+  if ((this._locations.length > boardLoc.z && boardLoc.z >= 0) &&
+    (this._locations[0].length > boardLoc.x && boardLoc.x >= 0)) {
+    if (this._locations[boardLoc.z][boardLoc.x]) {
       return true;
     }
     return false;
@@ -148,8 +155,8 @@ WarGame.Maps.BaseMap.prototype.getDistanceBetweenTwoLocations = function (loc1, 
 };
 
 WarGame.Maps.BaseMap.prototype.getMapLocationFromVector = function (vector) {
-    var zLength = this.attributes.grid.length;
-    var xLength = this.attributes.grid[0].length;
+    var zLength = this._attributes.grid.length;
+    var xLength = this._attributes.grid[0].length;
     var actualX = vector.x;
     var actualY = vector.y;
     var actualZ = vector.z;
@@ -164,8 +171,8 @@ WarGame.Maps.BaseMap.prototype.getMapLocationFromVector = function (vector) {
 };
 
 WarGame.Maps.BaseMap.prototype.getVectorFromMapLocation = function (boardLoc) {
-    var zLength = this.attributes.grid.length;
-    var xLength = this.attributes.grid[0].length;
+    var zLength = this._attributes.grid.length;
+    var xLength = this._attributes.grid[0].length;
     var boardX = boardLoc.x;
     var boardZ = boardLoc.z;
     var boardY = boardLoc.y;
@@ -180,10 +187,10 @@ WarGame.Maps.BaseMap.prototype.generateObj = function () {
     var mapGeometry = new THREE.Geometry();
     var matrix = new THREE.Matrix4();
 
-    for (var z=0; z<this.attributes.grid.length; z++) {
-        for (var x=0; x<this.attributes.grid[z].length; x++) {
+    for (var z=0; z<this._attributes.grid.length; z++) {
+        for (var x=0; x<this._attributes.grid[z].length; x++) {
             var boxGeometry = new THREE.BoxGeometry(1, WarGame.Maps.MAX_BLOCK_HEIGHT, 1);
-            var y = -(WarGame.Maps.MAX_BLOCK_HEIGHT) + this.attributes.grid[z][x];
+            var y = -(WarGame.Maps.MAX_BLOCK_HEIGHT) + this._attributes.grid[z][x];
             var loc = new WarGame.Maps.MapLocation(x, z);
             loc.y = y;
             var coordinates = this.getVectorFromMapLocation(loc);
@@ -204,5 +211,5 @@ WarGame.Maps.BaseMap.prototype.generateObj = function () {
     mapObj.receiveShadow = true;
     mapObj.castShadow = true;
 
-    this.obj = mapObj;
+    this._obj = mapObj;
 };

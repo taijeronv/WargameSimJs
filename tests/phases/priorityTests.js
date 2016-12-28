@@ -14,15 +14,17 @@ QUnit.test('calling start will determine a random team has priority', function (
     tmp.push(WarGame.Phases.next);
     WarGame.Phases.next = function () {};
 
-    var teamResults = [0, 0];
+    var teamResults = [];
+    teamResults[WarGame.Teams.get()[0].getName()] = 0;
+    teamResults[WarGame.Teams.get()[1].getName()] = 0;
     for (var i=0; i<100; i++) {
-        WarGame.Phases.Priority.start();
-        var index = WarGame.Teams.getTeamIndexByName(WarGame.Teams.get()[WarGame.Phases.Priority.index].getName());
+        WarGame.Phases.PriorityPhase.start();
+        var index = WarGame.Phases.PriorityPhase.getPriorityTeam().getName();
         teamResults[index]++;
     }
-    assert.equal(teamResults[0] + teamResults[1], 100, 'expected 100 results');
-    assert.ok(teamResults[0] > 10, 'expected at least 10 results for team 0');
-    assert.ok(teamResults[1] > 10, 'expected at least 10 results for team 1');
+    assert.equal(teamResults[WarGame.Teams.get()[0].getName()] + teamResults[WarGame.Teams.get()[1].getName()], 100, 'expected 100 results');
+    assert.ok(teamResults[WarGame.Teams.get()[0].getName()] > 10, 'expected at least 10 results for team 0');
+    assert.ok(teamResults[WarGame.Teams.get()[1].getName()] > 10, 'expected at least 10 results for team 1');
 
     WarGame.Phases.next = tmp[0];
     tmp = [];
@@ -33,7 +35,7 @@ QUnit.test('calling start will call end when done', function (assert) {
     tmp.push(WarGame.Phases.next);
     WarGame.Phases.next = function () { assert.ok(true, 'expected WarGame.Phases.next to be called'); };
 
-    WarGame.Phases.Priority.start();
+    WarGame.Phases.PriorityPhase.start();
 
     WarGame.Phases.next = tmp[0];
     tmp = [];

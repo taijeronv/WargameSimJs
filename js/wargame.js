@@ -28,5 +28,5 @@ WarGame.reset = function () {
 
 WarGame.start = function () {
     // TODO: create menus for picking teams, etc.
-    WarGame.Phases.doCurrent();
+    WarGame.Phases.startCurrent();
 };

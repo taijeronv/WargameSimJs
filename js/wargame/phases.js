@@ -6,12 +6,14 @@ WarGame.Phases.MOVEMENT = 1;
 WarGame.Phases.SHOOTING = 2;
 WarGame.Phases.FIGHTING = 3;
 
-WarGame.Phases.CURRENT = WarGame.Phases.PRIORITY; // start at 0
+WarGame.Phases.CURRENT_PHASE = WarGame.Phases.PRIORITY; // start at 0
+WarGame.Phases.TEAMS_COMPLETED_PHASE = 0; // tracks number of teams who have completed current phase
+WarGame.Phases._currentTeam = 0;
 
-WarGame.Phases.TEAMS_DONE = 0; // tracks number of teams who have completed current phase
+WarGame.Phases._array = [];
 
 WarGame.Phases.getCurrentPhaseName = function () {
-    switch (WarGame.Phases.CURRENT) {
+    switch (WarGame.Phases.CURRENT_PHASE) {
         case WarGame.Phases.PRIORITY:
             return 'PRIORITY';
         case WarGame.Phases.MOVEMENT:
@@ -23,38 +25,44 @@ WarGame.Phases.getCurrentPhaseName = function () {
     }
 };
 
-WarGame.Phases.doCurrent = function () {
-    switch (WarGame.Phases.CURRENT) {
-        case WarGame.Phases.PRIORITY:
-            WarGame.Phases.Priority.start();
-            break;
-        case WarGame.Phases.MOVEMENT:
-            WarGame.Phases.Move.start();
-            break;
-        case WarGame.Phases.SHOOTING:
-            WarGame.Phases.Shoot.start();
-            break;
-        case WarGame.Phases.FIGHTING:
-            WarGame.Phases.Fight.start();
-            break;
-        default:
-            // TODO: log this
-            throw "invalid phase specified: " + WarGame.Phases.CURRENT;
-    }
+WarGame.Phases.startCurrent = function () {
+  WarGame.Phases._array[WarGame.Phases.CURRENT_PHASE].start();
+};
+
+WarGame.Phases.endCurrent = function () {
+   WarGame.Phases._array[WarGame.Phases.CURRENT_PHASE].end();
+};
+
+WarGame.Phases.nextTeam = function () {
+  var count = WarGame.Teams.get().length;
+  WarGame.Phases.TEAMS_COMPLETED_PHASE++;
+  WarGame.Phases._currentTeam++;
+  if (WarGame.Phases._currentTeam >= count) {
+    WarGame.Phases._currentTeam = 0;
+    WarGame.Phases.endCurrent();
+    WarGame.Phases.next();
+  }
+};
+
+WarGame.Phases.getCurrentTeam = function () {
+  return WarGame.Teams.get()[WarGame.Phases._currentTeam];
 };
 
 WarGame.Phases.next = function () {
-    // end phase
-    WarGame.Phases.CURRENT++;
-    if (WarGame.Phases.CURRENT > WarGame.Phases.FIGHTING) {
-        WarGame.Phases.CURRENT = WarGame.Phases.PRIORITY;
-        WarGame.Rounds.next();
-    }
+  WarGame.Phases.TEAMS_COMPLETED_PHASE = 0;
+  // end phase
+  WarGame.Phases.CURRENT_PHASE++;
+  if (WarGame.Phases.CURRENT_PHASE >= WarGame.Phases._array.length) {
+      WarGame.Phases.CURRENT_PHASE = WarGame.Phases.PRIORITY;
+      WarGame.Rounds.next();
+  }
 
-    // start next phase
-    WarGame.Phases.doCurrent();
+  // start next phase
+  WarGame.Phases.startCurrent();
 };
 
 WarGame.Phases.reset = function () {
-    WarGame.Phases.CURRENT = WarGame.Phases.PRIORITY;
+    WarGame.Phases.CURRENT_PHASE = WarGame.Phases.PRIORITY;
+    WarGame.Phases.TEAMS_COMPLETED_PHASE = 0;
+    WarGame.Phases._currentTeam = 0;
 };

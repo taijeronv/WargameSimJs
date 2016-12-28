@@ -35,10 +35,10 @@
 <script src="js/wargame/battles/rangedBattle.js"></script>
 <script src="js/wargame/battles/meleBattle.js"></script>
 <script src="js/wargame/phases.js"></script>
-<script src="js/wargame/phases/priority.js"></script>
-<script src="js/wargame/phases/move.js"></script>
-<script src="js/wargame/phases/shoot.js"></script>
-<script src="js/wargame/phases/fight.js"></script>
+<script src="js/wargame/phases/priorityPhase.js"></script>
+<script src="js/wargame/phases/movePhase.js"></script>
+<script src="js/wargame/phases/shootPhase.js"></script>
+<script src="js/wargame/phases/fightPhase.js"></script>
 <script src="js/wargame.js"></script>
 <script src="js/wargame/ui.js"></script>
 <script src="js/wargame/ui/plotter.js"></script>
@@ -67,6 +67,7 @@
      * - heavy: strong, slow warriors (-20 points)
      * - hero: powerful warriors with high cost (-50 points)
      */
+    // TODO: handle team selection through UI
     red.addPlayer(new WarGame.Players.LightPlayer()); // -10 points
     red.addPlayer(new WarGame.Players.BasicPlayer()); // -15 points
     red.addPlayer(new WarGame.Players.BasicPlayer()); // -15 points
@@ -81,6 +82,18 @@
 
     WarGame.Teams.add(red);
     WarGame.Teams.add(blue);
+
+    // TODO: handle placing players through UI
+    var g = WarGame.Maps.get().getGrid();
+    var players = WarGame.Teams.getAllPlayers();
+    for (var z=0; z<g.length; z++) {
+      for (var x=0; x<g[z].length; x++) {
+        var p = players.pop();
+        if (p) {
+          map.placePlayer(p, new WarGame.Maps.MapLocation(x, z));
+        }
+      }
+    }
 
     WarGame.initialize();
 

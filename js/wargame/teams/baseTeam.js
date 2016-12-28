@@ -10,56 +10,56 @@ WarGame.Teams.BaseTeam = function (attributes) {
     if (!attributes.points || isNaN(attributes.points) || attributes.points < 1) {
         throw 'team must start with more than 0 points';
     }
-    this.attributes = attributes;
-    this.players = [];
-    this.remainingPoints = this.attributes.points;
-    this.score = 0;
+    this._attributes = attributes;
+    this._players = [];
+    this._remainingPoints = this._attributes.points;
+    this._score = 0;
 };
 
 WarGame.Teams.BaseTeam.prototype.addPlayer = function (player) {
-    if (this.remainingPoints - player.getCost() >= 0) {
-        this.remainingPoints -= player.getCost();
+    if (this._remainingPoints - player.getCost() >= 0) {
+        this._remainingPoints -= player.getCost();
         player.setTeam(this);
-        this.players.push(player);
+        this._players.push(player);
     } else {
         throw "not enough points to add player.";
     }
 };
 
 WarGame.Teams.BaseTeam.prototype.removePlayer = function (player) {
-    for (var plyr of this.players) {
+    for (var plyr of this._players) {
       if (plyr === player) {
-        this.remainingPoints += plyr.getCost();
+        this._remainingPoints += plyr.getCost();
         break;
       }
     }
-    this.players = this.players.filter(function (p) {
+    this._players = this._players.filter(function (p) {
         return p !== player;
     });
 };
 
 WarGame.Teams.BaseTeam.prototype.getPlayers = function () {
-    return this.players;
+    return this._players;
 };
 
 WarGame.Teams.BaseTeam.prototype.getName = function () {
-    return this.attributes.name;
+    return this._attributes.name;
 };
 
 WarGame.Teams.BaseTeam.prototype.getColour = function () {
-    return this.attributes.colour;
+    return this._attributes.colour;
 };
 
 WarGame.Teams.BaseTeam.prototype.getRemainingPoints = function () {
-    return this.remainingPoints;
+    return this._remainingPoints;
 };
 
 WarGame.Teams.BaseTeam.prototype.getScore = function () {
-    return this.score;
+    return this._score;
 };
 
 WarGame.Teams.BaseTeam.prototype.reset = function () {
-    this.players = [];
-    this.score = 0;
-    this.remainingPoints = this.attributes.points;
+    this._players = [];
+    this._score = 0;
+    this._remainingPoints = this._attributes.points;
 };

@@ -8,13 +8,13 @@ WarGame.Players.BasePlayer = function (attributes, stats) {
     this._team = null;
 };
 
-WarGame.Players.BasePlayer.prototype.setColour = function (colour) {
-    // this._obj.material.color.setHex(colour);
+WarGame.Players.BasePlayer.prototype.getId = function () {
+  return this._id;
 };
 
 WarGame.Players.BasePlayer.prototype.setTeam = function (team) {
   this._team = team;
-  this.setColour(this._team.colour);
+  this._obj = null;
 };
 
 WarGame.Players.BasePlayer.prototype.getTeam = function () {
@@ -103,9 +103,8 @@ WarGame.Players.BasePlayer.prototype.generateObj = function () {
     var playerObj = new THREE.Mesh(playerGeometry, playerMaterial);
     playerObj.castShadow = true;
 
-    this._obj = playerObj;
-
-    if (this._team && this._team.colour) {
-        this.setColour(this._team.colour);
+    if (this.getTeam()) {
+      playerObj.material.color.setHex(this.getTeam().getColour());
     }
+    return playerObj;
 };
