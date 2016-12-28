@@ -12,7 +12,7 @@ QUnit.test('can add a player at a location', function (assert) {
     expect(3);
     var done = assert.async();
     var m = new WarGame.Maps.Map10x10();
-    var p = new WarGame.Players.BasePlayer();
+    var p = new WarGame.Players.BasicPlayer();
     try {
       m.getPlayerLocation(p);
       assert.ok(false, 'expected player not found');
@@ -30,7 +30,7 @@ QUnit.test('can remove a player', function (assert) {
     expect(2);
     var done = assert.async();
     var m = new WarGame.Maps.Map10x10();
-    var p = new WarGame.Players.BasePlayer();
+    var p = new WarGame.Players.BasicPlayer();
     try {
       m.getPlayerLocation(p);
       assert.ok(false, 'expected player not found');

@@ -33,6 +33,14 @@ WarGame.Players.BasePlayer.prototype.getShoot = function () {
   return this._attributes.shoot;
 };
 
+WarGame.Players.BasePlayer.prototype.getWidth = function () {
+  return this._attributes.width;
+};
+
+WarGame.Players.BasePlayer.prototype.getHeight = function () {
+  return this._attributes.height;
+};
+
 WarGame.Players.BasePlayer.prototype.inflictWound = function () {
     this._stats.wounds--;
 };
@@ -81,22 +89,22 @@ WarGame.Players.BasePlayer.prototype.generateObj = function () {
 
     // body
     geometry = new THREE.CylinderGeometry(
-        this._attributes.width / 2, // top radius
+        this.getWidth() / 2, // top radius
         0.1, // bottom radius
-        this._attributes.height, // length
+        this.getHeight(), // length
         6,  // circle segments
         1,   // length segments
         false); // open
-    matrix.makeTranslation(0, (this._attributes.height / 2) + 0.1, 0);
+    matrix.makeTranslation(0, (this.getHeight() / 2) + 0.1, 0);
     playerGeometry.merge(geometry, matrix);
 
     // head
-    var headRadius = (this._attributes.width / 2) - 0.1;
+    var headRadius = (this.getWidth() / 2) - 0.1;
     geometry = new THREE.SphereGeometry(
         headRadius, // radius
         6,  // width segments
         6); // height segments
-    matrix.makeTranslation(0, (this._attributes.height / 2) + 0.1 + ((this._attributes.height / 2) + (this._attributes.width / 2)), 0);
+    matrix.makeTranslation(0, (this.getHeight() / 2) + 0.1 + ((this.getHeight() / 2) + (this.getWidth() / 2)), 0);
     playerGeometry.merge(geometry, matrix);
 
     var playerMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 }); // gray (set later)

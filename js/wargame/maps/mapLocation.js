@@ -14,7 +14,7 @@ WarGame.Maps.MapLocation.prototype.clone = function () {
 
 WarGame.Maps.MapLocation.prototype.equals = function (location) {
     if (this.x === location.x &&
-        this.y === location.y) {
+        this.z === location.z) {
         return true;
     } else {
         return false;
@@ -22,5 +22,5 @@ WarGame.Maps.MapLocation.prototype.equals = function (location) {
 };
 
 WarGame.Maps.MapLocation.prototype.toString = function () {
-    return this.x + ':' + this.y;
+    return this.x + ':' + this.z;
 };
