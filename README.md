@@ -2,6 +2,9 @@
 This project creates a Javascript based strategy game that can be played between
 two players within a browser
 
+## Demo
+[POC](https://rawgit.com/bicarbon8/WargameSimJs/Refactor/index.html)
+
 ## Features
 - Turn-based play
 - 3D visualisation of characters and playing field
