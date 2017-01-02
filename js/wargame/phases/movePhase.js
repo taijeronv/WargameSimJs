@@ -1,6 +1,12 @@
 var WarGame = WarGame || {};
 WarGame.Phases = WarGame.Phases || {};
 WarGame.Phases.MovePhase = {
+  _name: 'movement',
+
+  getName: function () {
+    return WarGame.Phases.MovePhase._name;
+  },
+
   start: function () {
       var players = WarGame.Teams.getAllPlayers();
       // for (var i=0; i<players.length; i++) {

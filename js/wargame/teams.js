@@ -2,6 +2,7 @@ var WarGame = WarGame || {};
 WarGame.Teams = {};
 
 WarGame.Teams._array = [];
+WarGame.Teams._curentTeam = null;
 
 WarGame.Teams.get = function () {
   return WarGame.Teams._array;
@@ -12,6 +13,20 @@ WarGame.Teams.add = function (team) {
   if (team instanceof WarGame.Teams.BaseTeam && WarGame.Teams._array.indexOf(team) < 0) {
       WarGame.Teams._array.push(team);
   }
+};
+
+WarGame.Teams.nextTeam = function () {
+  var count = WarGame.Teams.get().length;
+  WarGame.Phases.TEAMS_COMPLETED_PHASE++;
+  WarGame.Teams._currentTeam++;
+  if (WarGame.Teams.getCurrentTeam() >= count) {
+    WarGame.Teams._currentTeam = 0;
+    WarGame.Events.enqueue(new WarGame.Teams.AllTeamsCompletedEvent());
+  }
+};
+
+WarGame.Phases.getCurrentTeam = function () {
+  return WarGame.Teams.get()[WarGame.Teams._currentTeam];
 };
 
 WarGame.Teams.getTeamIndexByName = function (name) {

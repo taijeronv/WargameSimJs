@@ -5,6 +5,11 @@ WarGame.Phases.ShootPhase = {
     _battle: null,
     _pickFromTeam: null,
     _opponentsInRange: null,
+    _name: 'shooting',
+
+    getName: function () {
+      return WarGame.Phases.ShootPhase._name;
+    },
 
     start: function () {
         var players = WarGame.Teams.getAllPlayers();

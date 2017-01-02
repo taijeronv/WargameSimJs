@@ -16,6 +16,22 @@ WarGame.Maps.BaseMap.prototype.getGrid = function () {
   return this._attributes.grid;
 };
 
+WarGame.Maps.BaseMap.prototype.addTeam = function (team, spawnPointIndex) {
+  var sp = this.getSpawnPointByIndex(spawnPointIndex);
+
+};
+
+WarGame.Maps.BaseMap.prototype.getSpawnPoints = function () {
+  return this._attributes.spawnPoints;
+};
+
+WarGame.Maps.BaseMap.prototype.getSpawnPointByIndex = function (index) {
+  if (index >= 0 && index < this.getSpawnPoints().length) {
+    return this.getSpawnPoints()[index];
+  }
+  throw 'invalid index passed to method';
+};
+
 WarGame.Maps.BaseMap.prototype.placePlayer = function(player, boardLoc) {
   if (!this.isLocationOccupied(boardLoc)) {
     try {
@@ -128,14 +144,50 @@ WarGame.Maps.BaseMap.prototype.getPlayerLocation = function(player) {
 };
 
 WarGame.Maps.BaseMap.prototype.isLocationOccupied = function (boardLoc) {
-  if ((this._locations.length > boardLoc.z && boardLoc.z >= 0) &&
-    (this._locations[0].length > boardLoc.x && boardLoc.x >= 0)) {
+  if (this.isValidLocation(boardLoc)) {
     if (this._locations[boardLoc.z][boardLoc.x]) {
       return true;
     }
     return false;
   }
   throw "invalid location specified: " + boardLoc.toString();
+};
+
+WarGame.Maps.BaseMap.prototype.getUnoccupiedLocationsAround(boardLoc, offset) {
+  var locations = [];
+  var allLocations = this.getLocationsAround(boardLoc, offset);
+  for (var i=0; i<allLocations.length; i++) {
+    if (!this.isLocationsOccupied(allLocations[i])) {
+      locations.push(allLocations[i]);
+    }
+  }
+  return locations;
+};
+
+WarGame.Maps.BaseMap.prototype.getLocationsAround(boardLoc, offset) {
+  var locations = [];
+  if (!offset) {
+    offset = 1;
+  }
+  var min = new WarGame.Maps.MapLocation(boardLoc.x-offset, boardLoc.z-offset);
+  var max = new WarGame.Maps.MapLocation(boardLoc.x+offset, boardLoc.z+offset);
+  for (var z=min.z; z<=max.z; z++) {
+    for (var x=min.x; x<=max.x; x++) {
+      var loc = new WarGame.Maps.MapLocation(x, z);
+      if (this.isValidLocation(loc)) {
+        locations.push(loc);
+      }
+    }
+  }
+  return locations;
+};
+
+WarGame.Maps.BaseMap.prototype.isValidLocation = function (boardLoc) {
+  if ((this._locations.length > boardLoc.z && boardLoc.z >= 0) &&
+    (this._locations[0].length > boardLoc.x && boardLoc.x >= 0)) {
+    return true;
+  }
+  return false;
 };
 
 WarGame.Maps.BaseMap.prototype.getDistanceBetweenTwoLocations = function (loc1, loc2) {

@@ -15,7 +15,13 @@ WarGame.Maps.Map10x10 = function() {
         [0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0],
     ],
-    'resources/sprites/grass-texture-2.jpg' // texture
+    'resources/sprites/grass-texture-2.jpg', // texture
+    [
+      new WarGame.Maps.MapLocation(0,0), // top left
+      new WarGame.Maps.MapLocation(9,0), // top right
+      new WarGame.Maps.MapLocation(0,9), // bottom left
+      new WarGame.Maps.MapLocation(9,9), // bottom right
+    ] // spawn points (4 corners)
   );
 
   WarGame.Maps.BaseMap.call(this, attributes);

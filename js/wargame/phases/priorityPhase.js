@@ -4,6 +4,12 @@ WarGame.Phases.PriorityPhase = {};
 
 WarGame.Phases.PriorityPhase._index = 0;
 
+WarGame.Phases.PriorityPhase._name = 'priority';
+
+WarGame.Phases.PriorityPhase.getName = function () {
+  return WarGame.Phases.PriorityPhase._name;
+};
+
 /**
  * this phase is responsible for selecting which team goes
  * first in each subsequent phase of the current round

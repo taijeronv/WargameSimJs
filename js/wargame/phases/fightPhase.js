@@ -3,6 +3,11 @@ WarGame.Phases = WarGame.Phases || {};
 WarGame.Phases.FightPhase = {
     _intersected: null,
     _battles: null,
+    _name: 'fighting',
+
+    getName: function () {
+      return WarGame.Phases.FightPhase._name;
+    },
 
     start: function () {
         // WarGame.UI.setCurrentPhaseText('FIGHTING');
